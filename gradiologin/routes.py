@@ -39,12 +39,19 @@ def add_routes(app, app_route, no_login_page=False):
 
     @app.get('/tools/auth/{provider_name}')
     async def auth(request: Request, provider_name: str):
+        logger.debug("in auth")
         client = oauth.create_client(provider_name)
         try:
+            logger.debug("getting token")
             token = await client.authorize_access_token(request)
+            logger.debug("token:")
+            logger.debug(token)
         except OAuthError as error:
+            logger.debug("ERROR")
+            logger.debug(error.error)
             return HTMLResponse(f'<h1>{error.error}</h1>')
         user = token.get('userinfo')
+        logger.debug(user)
         if user:
             request.session['user'] = dict(user)
         return RedirectResponse(url='/tools')
