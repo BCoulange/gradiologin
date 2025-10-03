@@ -135,7 +135,7 @@ a {
 <div class="buttons">
 {% for provider in providers %}
 <button class="gsi-material-button">
-    <a class="gsi-material-button-content-wrapper" href="/tools/login/{{ provider.name }}">
+    <a class="gsi-material-button-content-wrapper" href="{{ loginPath }}/login/{{ provider.name }}">
     <span class="gsi-material-button-contents">
     {% if provider.icon %}
     <i style="margin-right: 6px;"  class="fa-brands fa-{{ provider.icon }}"></i>
