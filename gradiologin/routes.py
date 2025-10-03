@@ -5,7 +5,7 @@ from fastapi.templating import Jinja2Templates
 import gradiologin
 import importlib.resources
 import logging
-logger = logging.getLogger(__name__)
+
 logging.basicConfig(level="DEBUG")
 
 providers = []
