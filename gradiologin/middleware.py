@@ -5,7 +5,7 @@ from starlette.responses import RedirectResponse
 def add_middleware_redirect(app, app_route):
     @app.middleware("http")
     async def check_authentication(request: Request, call_next):
-        if request.url.path.startswith('/tools/login') or request.url.path.startswith('/auth'):
+        if request.url.path.startswith('/tools/login') or request.url.path.startswith('/tools/auth'):
             # Skip authentication check for login and authentication routes
             return await call_next(request)
 
