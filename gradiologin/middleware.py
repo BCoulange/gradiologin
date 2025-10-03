@@ -2,10 +2,10 @@ from starlette.requests import Request
 from starlette.responses import RedirectResponse
 
 
-def add_middleware_redirect(app, app_route):
+def add_middleware_redirect(app, app_route,loginPath):
     @app.middleware("http")
     async def check_authentication(request: Request, call_next):
-        if request.url.path.startswith('/tools/login') or request.url.path.startswith('/tools/auth'):
+        if request.url.path.startswith(loginPath+'/login') or request.url.path.startswith(loginPath+'/auth'):
             # Skip authentication check for login and authentication routes
             return await call_next(request)
 
@@ -16,7 +16,7 @@ def add_middleware_redirect(app, app_route):
         if not user:
 
             # User is not logged in, redirect to login page
-            return RedirectResponse(url="/tools/login")
+            return RedirectResponse(url=loginPath+"/login")
 
         return await call_next(request)
 
