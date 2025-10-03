@@ -12,9 +12,7 @@ templates = Jinja2Templates(directory=importlib.resources.files(gradiologin).joi
 def add_routes(app, app_route, no_login_page=False, loginPath="/"):
     @app.get('/')
     async def homepage(request: Request):
-        logger.debug("in the homepage")
         user = request.session.get('user')
-        logger.debug(user)
         if user:            
             return RedirectResponse(url=app_route)
         return RedirectResponse(url=loginPath+'/login')
