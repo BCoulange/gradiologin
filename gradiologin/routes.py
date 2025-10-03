@@ -14,7 +14,7 @@ providers = []
 templates = Jinja2Templates(directory=importlib.resources.files(gradiologin).joinpath("templates"))
 
 def add_routes(app, app_route, no_login_page=False):
-    @app.get('/tools')
+    @app.get('/')
     async def homepage(request: Request):
         logger.debug("in the homepage")
         user = request.session.get('user')
