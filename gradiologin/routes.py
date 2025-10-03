@@ -14,7 +14,10 @@ def add_routes(app, app_route, no_login_page=False):
     @app.get('/tools')
     async def homepage(request: Request):
         user = request.session.get('user')
+        print("USER!!!!!!")
+        print(user)
         if user:
+            
             return RedirectResponse(url=app_route)
         return RedirectResponse(url='/tools/login')
 
