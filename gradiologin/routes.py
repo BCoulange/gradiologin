@@ -7,6 +7,7 @@ import importlib.resources
 import logging
 
 logging.basicConfig(level="DEBUG")
+logger = logging.getLogger(__name__)  # NOT root
 
 providers = []
 
