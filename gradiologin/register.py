@@ -14,7 +14,7 @@ def register(*args, **kwargs):
     providers.append(kwargs)
     return oauth.register(*args, **kwargs)
 
-def mount_gradio_app(*args, secret_key="some-secret-string", no_login_page=False, **kwargs, loginPath="/"):
+def mount_gradio_app(*args, secret_key="some-secret-string", no_login_page=False, loginPath="/", **kwargs):
     # Proxy gradio's mount_gradio_app
     # to add authentication and routes
     app = args[0]
@@ -22,5 +22,6 @@ def mount_gradio_app(*args, secret_key="some-secret-string", no_login_page=False
     init(app,
          secret_key,
          path,
-         no_login_page)
+         no_login_page,
+         loginPath)
     return gradio.mount_gradio_app(*args, **kwargs)
