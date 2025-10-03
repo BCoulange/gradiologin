@@ -11,7 +11,7 @@ providers = []
 templates = Jinja2Templates(directory=importlib.resources.files(gradiologin).joinpath("templates"))
 
 def add_routes(app, app_route, no_login_page=False):
-    @app.get('/')
+    @app.get('/tools')
     async def homepage(request: Request):
         user = request.session.get('user')
         if user:
@@ -19,19 +19,19 @@ def add_routes(app, app_route, no_login_page=False):
         return RedirectResponse(url='login')
 
     if not no_login_page:
-        @app.get('/login')
+        @app.get('/tools/login')
         async def login(request: Request):
             return templates.TemplateResponse(
                 request=request, name="index.template.html", context={"providers": providers}
             )
 
-    @app.get('/login/{provider_name}')
+    @app.get('/tools/login/{provider_name}')
     async def login(request: Request, provider_name: str):
         client = oauth.create_client(provider_name)
         redirect_uri = request.url_for('auth', provider_name=provider_name)
         return await client.authorize_redirect(request, redirect_uri)
 
-    @app.get('/auth/{provider_name}')
+    @app.get('/tools/auth/{provider_name}')
     async def auth(request: Request, provider_name: str):
         client = oauth.create_client(provider_name)
         try:
@@ -44,7 +44,7 @@ def add_routes(app, app_route, no_login_page=False):
         return RedirectResponse(url='/')
 
 
-    @app.get('/logout')
+    @app.get('/tools/logout')
     async def logout(request: Request):
         request.session.pop('user', None)
         return RedirectResponse(url='/')
