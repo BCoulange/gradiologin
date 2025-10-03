@@ -16,7 +16,7 @@ def add_routes(app, app_route, no_login_page=False):
         user = request.session.get('user')
         if user:
             return RedirectResponse(url=app_route)
-        return RedirectResponse(url='login')
+        return RedirectResponse(url='/tools/login')
 
     if not no_login_page:
         @app.get('/tools/login')
@@ -41,10 +41,10 @@ def add_routes(app, app_route, no_login_page=False):
         user = token.get('userinfo')
         if user:
             request.session['user'] = dict(user)
-        return RedirectResponse(url='/')
+        return RedirectResponse(url='/tools')
 
 
     @app.get('/tools/logout')
     async def logout(request: Request):
         request.session.pop('user', None)
-        return RedirectResponse(url='/')
+        return RedirectResponse(url='/tools')
