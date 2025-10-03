@@ -6,6 +6,7 @@ import gradiologin
 import importlib.resources
 import logging
 logging.basicConfig(level="DEBUG")
+logging.propagate = True
 
 providers = []
 
