@@ -20,7 +20,6 @@ def add_routes(app, app_route, no_login_page=False, loginPath="/"):
     if not no_login_page:
         @app.get(loginPath+'/login')
         async def login(request: Request):
-            logger.debug("in login page")
             return templates.TemplateResponse(
                 request=request, name="index.template.html", context={"providers": providers, "loginPath": loginPath}
             )
