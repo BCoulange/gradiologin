@@ -4,16 +4,12 @@ from gradiologin.oauth import oauth
 from fastapi.templating import Jinja2Templates
 import gradiologin
 import importlib.resources
-import logging
-
-logging.basicConfig(level="DEBUG")
-logger = logging.getLogger(__name__)  # NOT root
 
 providers = []
 
 templates = Jinja2Templates(directory=importlib.resources.files(gradiologin).joinpath("templates"))
 
-def add_routes(app, app_route, no_login_page=False):
+def add_routes(app, app_route, no_login_page=False, loginPath="/"):
     @app.get('/')
     async def homepage(request: Request):
         logger.debug("in the homepage")
@@ -21,43 +17,36 @@ def add_routes(app, app_route, no_login_page=False):
         logger.debug(user)
         if user:            
             return RedirectResponse(url=app_route)
-        return RedirectResponse(url='/tools/login')
+        return RedirectResponse(url=loginPath+'/login')
 
     if not no_login_page:
-        @app.get('/tools/login')
+        @app.get(loginPath+'/login')
         async def login(request: Request):
             logger.debug("in login page")
             return templates.TemplateResponse(
                 request=request, name="index.template.html", context={"providers": providers}
             )
 
-    @app.get('/tools/login/{provider_name}')
+    @app.get(loginPath+'/login/{provider_name}')
     async def login(request: Request, provider_name: str):
         client = oauth.create_client(provider_name)
         redirect_uri = request.url_for('auth', provider_name=provider_name)
         return await client.authorize_redirect(request, redirect_uri)
 
-    @app.get('/tools/auth/{provider_name}')
+    @app.get(loginPath+'/auth/{provider_name}')
     async def auth(request: Request, provider_name: str):
-        logger.debug("in auth")
         client = oauth.create_client(provider_name)
         try:
-            logger.debug("getting token")
             token = await client.authorize_access_token(request)
-            logger.debug("token:")
-            logger.debug(token)
         except OAuthError as error:
-            logger.debug("ERROR")
-            logger.debug(error.error)
             return HTMLResponse(f'<h1>{error.error}</h1>')
         user = token.get('userinfo')
-        logger.debug(user)
         if user:
             request.session['user'] = dict(user)
-        return RedirectResponse(url='/tools')
+        return RedirectResponse(url=app_route)
 
 
-    @app.get('/tools/logout')
+    @app.get(loginPath+'/logout')
     async def logout(request: Request):
         request.session.pop('user', None)
-        return RedirectResponse(url='/tools')
+        return RedirectResponse(url=app_route)
