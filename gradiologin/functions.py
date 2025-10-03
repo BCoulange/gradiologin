@@ -14,7 +14,7 @@ def get_user(request: gradio.Request):
     return user
 
 def LogoutButton(*args, **kwargs):
-    logout_js="window.location.href='/logout'"
+    logout_js="window.location.href='/tools/logout'"
     btn_logout = gradio.Button(*args, **kwargs)
     btn_logout.click(None, js=logout_js)
     return btn_logout
