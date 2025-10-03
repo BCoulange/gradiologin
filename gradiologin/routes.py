@@ -4,18 +4,15 @@ from gradiologin.oauth import oauth
 from fastapi.templating import Jinja2Templates
 import gradiologin
 import importlib.resources
-import logging # DEVDEVDEV
 
 providers = []
 
 templates = Jinja2Templates(directory=importlib.resources.files(gradiologin).joinpath("templates"))
 
 def add_routes(app, app_route, no_login_page=False):
-    @app.get('/tools')
+    @app.get('/')
     async def homepage(request: Request):
         user = request.session.get('user')
-        logging.warning("USER!!!!!!")  # DEVDEVDEV
-        logging.warning(user)  # DEVDEVDEV
         if user:
             
             return RedirectResponse(url=app_route)
